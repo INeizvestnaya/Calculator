@@ -1,0 +1,6 @@
+{
+  "singleQuote": true,
+  "parser": "babel",
+  "trailingComma": "none",
+  "endOfLine": "auto"
+}
