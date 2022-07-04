@@ -36,7 +36,12 @@
         "import/resolver": {
             "alias": {
                 "map": [
+                    ["@Assets", "./src/assets"],
                     ["@Components", "./src/components"],
+                    ["@Containers", "./src/containers"],
+                    ["@Constants", "./src/constants"],
+                    ["@Screens", "./src/screens"],
+                    ["@Utils", "./src/utils"],
                     ["@", "./src"]
                 ]
             }
