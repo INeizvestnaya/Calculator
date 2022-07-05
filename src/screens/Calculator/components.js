@@ -12,6 +12,7 @@ const CalculatorWrapper = styled.div`
       flex-direction: row;
     }
   }
+  background-color: ${({ theme }) => theme.colors.mainBackground};
 `;
 
 const FunctionalityWrapper = styled.div`

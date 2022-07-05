@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const HorizontalLine = styled.div`
   height: 3px;
   border-radius: 50%;
-  background-color: ${({ theme }) => theme.colors.darkGrey};
+  background-color: ${({ theme }) => theme.colors.deviders};
   margin: 0% 4% 0% 4%;
 `;
 

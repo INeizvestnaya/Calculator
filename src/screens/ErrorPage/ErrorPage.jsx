@@ -1,7 +1,11 @@
-import ErrorPageLabel from './components';
+import {ErrorPageLabel, ErrorPageWrapper} from './components';
 
 function ErrorPage() {
-  return <ErrorPageLabel>This page doesn&apos;t exist</ErrorPageLabel>;
+  return (
+    <ErrorPageWrapper>
+      <ErrorPageLabel>This page doesn&apos;t exist</ErrorPageLabel>
+    </ErrorPageWrapper>
+  );
 }
 
 export default ErrorPage;

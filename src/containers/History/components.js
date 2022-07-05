@@ -19,6 +19,7 @@ const HistoryWrapper = styled.div`
 const HistoryLabel = styled.div`
   text-align: center;
   padding: 5%;
+  color: ${({ theme }) => theme.colors.font};
 `;
 
 export { HistoryWrapper, HistoryLabel };

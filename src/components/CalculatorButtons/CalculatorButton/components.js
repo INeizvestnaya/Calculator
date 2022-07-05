@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
 const CButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.lightGrey};
+  background-color: ${({ theme }) => theme.colors.buttonsBackgound};
   border-radius: 20%;
-  border: 2px solid ${({ theme }) => theme.colors.middleBorderGrey};
+  border: 2px solid ${({ theme }) => theme.colors.buttonsBorder};
+  color: ${({ theme }) => theme.colors.font};
   &:hover {
-    background-color: ${({ theme }) => theme.colors.hoverGrey};
+    background-color: ${({ theme }) => theme.colors.buttonHover};
   }
   @media (max-width: 1000px) {
     font-size: 25px;

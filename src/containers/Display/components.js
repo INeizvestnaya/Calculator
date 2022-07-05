@@ -20,9 +20,11 @@ const DisplayWrapper = styled.div`
 
 const CurrentExpression = styled.div`
   font-size: 1.5rem;
+  color: ${({ theme }) => theme.colors.font};
 `;
 const CurrentHistory = styled.div`
   font-size: 0.6rem;
+  color: ${({ theme }) => theme.colors.font};
 `;
 
 export { DisplayWrapper, CurrentExpression, CurrentHistory };
