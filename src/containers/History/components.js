@@ -18,8 +18,22 @@ const HistoryWrapper = styled.div`
 
 const HistoryLabel = styled.div`
   text-align: center;
-  padding: 5%;
+  @media (orientation: portrait) {
+    & {
+      padding: 2%;
+    }
+  }
+  @media (orientation: landscape) {
+    & {
+      padding: 5%;
+    }
+  }
   color: ${({ theme }) => theme.colors.font};
 `;
 
-export { HistoryWrapper, HistoryLabel };
+const ItemsWrapper = styled.div`
+  margin-bottom: 20px;
+  overflow: auto;
+`;
+
+export { HistoryWrapper, HistoryLabel, ItemsWrapper };

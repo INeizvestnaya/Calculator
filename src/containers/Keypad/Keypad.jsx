@@ -2,15 +2,30 @@ import React from 'react';
 import CalculatorButton from '@Components/CalculatorButtons/CalculatorButton';
 import ButtonLong from '@Components/CalculatorButtons/ButtonLong';
 import ButtonsColumn from '@Components/ButtonsColumn';
+import {
+  PLUS,
+  MINUS,
+  MULTIPLY,
+  DIVIDE,
+  REMAINDER,
+  EQUAL,
+  DOT,
+  LEFT_BRACKET,
+  RIGHT_BRACKET,
+  PLUS_MINUS,
+  CE_SIGN,
+  C_SIGN,
+  ZERO
+} from '@Constants/calculator-signs';
 import KeypadFuncContainer from './components';
 
 const keypad = [
-  ['+/-', '.', 'C', 'CE'],
-  [7, 4, 1, '('],
-  [8, 5, 2, 0],
-  [9, 6, 3, ')'],
-  ['*', '-', '+'],
-  ['\\', '%', '=']
+  [PLUS_MINUS, DOT, C_SIGN, CE_SIGN],
+  [7, 4, 1, LEFT_BRACKET],
+  [8, 5, 2, ZERO],
+  [9, 6, 3, RIGHT_BRACKET],
+  [MULTIPLY, MINUS, PLUS],
+  [DIVIDE, REMAINDER, EQUAL]
 ];
 
 function KeypadFunc() {

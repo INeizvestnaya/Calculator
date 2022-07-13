@@ -21,10 +21,30 @@ const DisplayWrapper = styled.div`
 const CurrentExpression = styled.div`
   font-size: 1.5rem;
   color: ${({ theme }) => theme.colors.font};
+  @media (orientation: portrait) {
+    & {
+      height: 5vh;
+    }
+  }
+  @media (orientation: landscape) {
+    & {
+      height: 9vh;
+    }
+  }
 `;
 const CurrentHistory = styled.div`
-  font-size: 0.6rem;
+  font-size: 0.7rem;
   color: ${({ theme }) => theme.colors.font};
+  @media (orientation: portrait) {
+    & {
+      height: 2vh;
+    }
+  }
+  @media (orientation: landscape) {
+    & {
+      height: 5vh;
+    }
+  }
 `;
 
 export { DisplayWrapper, CurrentExpression, CurrentHistory };

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { CalculatorContext } from '@Utils/CalculatorContext';
 import {
   DisplayWrapper,
   CurrentExpression,
@@ -6,23 +7,27 @@ import {
 } from './components';
 
 function DisplayFunc() {
+  const ctx = useContext(CalculatorContext);
+
   return (
     <DisplayWrapper>
-      <CurrentHistory>5+5=10</CurrentHistory>
-      <CurrentExpression>10-</CurrentExpression>
+      <CurrentHistory>{ctx.prevOperand + ctx.operation}</CurrentHistory>
+      <CurrentExpression>{ctx.curOperand}</CurrentExpression>
     </DisplayWrapper>
   );
 }
 
 class DisplayClass extends React.Component {
   render() {
+    const { prevOperand, operation, curOperand } = this.context;
     return (
       <DisplayWrapper>
-        <CurrentHistory>5+5=10</CurrentHistory>
-        <CurrentExpression>10-</CurrentExpression>
+        <CurrentHistory>{prevOperand + operation}</CurrentHistory>
+        <CurrentExpression>{curOperand}</CurrentExpression>
       </DisplayWrapper>
     );
   }
 }
+DisplayClass.contextType = CalculatorContext;
 
 export { DisplayFunc, DisplayClass };

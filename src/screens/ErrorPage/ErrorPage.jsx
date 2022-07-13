@@ -1,4 +1,4 @@
-import {ErrorPageLabel, ErrorPageWrapper} from './components';
+import { ErrorPageLabel, ErrorPageWrapper } from './components';
 
 function ErrorPage() {
   return (

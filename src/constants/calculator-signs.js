@@ -1,0 +1,13 @@
+export const PLUS = '+';
+export const MINUS = '-';
+export const MULTIPLY = '*';
+export const DIVIDE = '\\';
+export const REMAINDER = '%';
+export const EQUAL = '=';
+export const DOT = '.';
+export const LEFT_BRACKET = '(';
+export const RIGHT_BRACKET = ')';
+export const PLUS_MINUS = '+/-';
+export const CE_SIGN = 'CE';
+export const C_SIGN = 'C';
+export const ZERO = '0';

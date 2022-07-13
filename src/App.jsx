@@ -8,6 +8,7 @@ import Header from '@Containers/Header';
 import GlobalStyles from '@Utils/GlobalStyles';
 import { LIGHT, COLORED, DARK } from '@Constants/themes';
 import themes from '@Utils/StyleTheme';
+import { CalculatorContextProvider } from '@Utils/CalculatorContext';
 
 function App() {
   const [theme, setTheme] = useState({ type: LIGHT, value: themes.light });
@@ -23,24 +24,26 @@ function App() {
   };
 
   return (
-    <ThemeProvider theme={theme.value}>
-      <Header />
-      <Routes>
-        <Route path="/calculator-functional" element={<CalculatorFunc />} />
-        <Route path="/calculator-class" element={<CalculatorClass />} />
-        <Route
-          path="/settings"
-          element={
-            <SettingsPage
-              changeTheme={changeTheme}
-              selectedValue={theme.type}
-            />
-          }
-        />
-        <Route path="/*" element={<ErrorPage />} />
-      </Routes>
-      <GlobalStyles />
-    </ThemeProvider>
+    <CalculatorContextProvider>
+      <ThemeProvider theme={theme.value}>
+        <Header />
+        <Routes>
+          <Route path="/calculator-functional" element={<CalculatorFunc />} />
+          <Route path="/calculator-class" element={<CalculatorClass />} />
+          <Route
+            path="/settings"
+            element={
+              <SettingsPage
+                changeTheme={changeTheme}
+                selectedValue={theme.type}
+              />
+            }
+          />
+          <Route path="/*" element={<ErrorPage />} />
+        </Routes>
+        <GlobalStyles />
+      </ThemeProvider>
+    </CalculatorContextProvider>
   );
 }
 
