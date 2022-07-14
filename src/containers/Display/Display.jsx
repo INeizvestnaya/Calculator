@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CalculatorContext } from '@Utils/CalculatorContext';
+import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
 import {
   DisplayWrapper,
   CurrentExpression,
@@ -11,7 +11,7 @@ function DisplayFunc() {
 
   return (
     <DisplayWrapper>
-      <CurrentHistory>{ctx.prevOperand + ctx.operation}</CurrentHistory>
+      <CurrentHistory>{ctx.prevOperand}</CurrentHistory>
       <CurrentExpression>{ctx.curOperand}</CurrentExpression>
     </DisplayWrapper>
   );
@@ -19,10 +19,10 @@ function DisplayFunc() {
 
 class DisplayClass extends React.Component {
   render() {
-    const { prevOperand, operation, curOperand } = this.context;
+    const { prevOperand, curOperand } = this.context;
     return (
       <DisplayWrapper>
-        <CurrentHistory>{prevOperand + operation}</CurrentHistory>
+        <CurrentHistory>{prevOperand}</CurrentHistory>
         <CurrentExpression>{curOperand}</CurrentExpression>
       </DisplayWrapper>
     );

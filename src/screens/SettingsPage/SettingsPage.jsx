@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { CalculatorContext } from '@Utils/CalculatorContext';
+import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
 import { LIGHT, DARK, COLORED } from '@Constants/themes';
 import { CLEAR_ALL_HISTORY } from '@Constants/calculator-actions';
 import {

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { CalculatorContext } from '@Utils/CalculatorContext';
+import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
 import HistoryItem from '@Components/HistoryItem';
 import { HistoryWrapper, HistoryLabel, ItemsWrapper } from './components';
 

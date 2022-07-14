@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useContext } from 'react';
-import { CalculatorContext } from '@Utils/CalculatorContext';
+import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
 import { CHOOSE_OPERATION, EXECUTE } from '@Constants/calculator-actions';
 import { PLUS } from '@Constants/calculator-signs';
 import LongCButton from './components';

@@ -8,7 +8,7 @@ import Header from '@Containers/Header';
 import GlobalStyles from '@Utils/GlobalStyles';
 import { LIGHT, COLORED, DARK } from '@Constants/themes';
 import themes from '@Utils/StyleTheme';
-import { CalculatorContextProvider } from '@Utils/CalculatorContext';
+import { CalculatorContextProvider } from '@Utils/CalculatorContext.jsx';
 
 function App() {
   const [theme, setTheme] = useState({ type: LIGHT, value: themes.light });
