@@ -11,7 +11,7 @@ function DisplayFunc() {
 
   return (
     <DisplayWrapper>
-      <CurrentHistory>{ctx.prevOperand}</CurrentHistory>
+      <CurrentHistory>{ctx.prevOperand.join('')}</CurrentHistory>
       <CurrentExpression>{ctx.curOperand}</CurrentExpression>
     </DisplayWrapper>
   );
@@ -22,7 +22,7 @@ class DisplayClass extends React.Component {
     const { prevOperand, curOperand } = this.context;
     return (
       <DisplayWrapper>
-        <CurrentHistory>{prevOperand}</CurrentHistory>
+        <CurrentHistory>{prevOperand.join('')}</CurrentHistory>
         <CurrentExpression>{curOperand}</CurrentExpression>
       </DisplayWrapper>
     );

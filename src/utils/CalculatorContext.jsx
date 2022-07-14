@@ -31,7 +31,7 @@ import Calculator, {
 
 const emptyState = {
   curOperand: '',
-  prevOperand: '',
+  prevOperand: [],
   overwrite: false,
   history: []
 };
@@ -40,56 +40,12 @@ const CalculatorContext = React.createContext({
   dispatch: () => {},
   history: [],
   curOperand: '',
-  prevOperand: '',
+  prevOperand: [],
   operation: '',
   overwrite: false
 });
 
 const calculator = Calculator();
-
-function parseExp(exp) {
-  const parsed = [];
-  let num = '';
-  let lastSign = 0;
-
-  for (let i = 0; i < exp.length; i += 1) {
-    const cur = exp[i];
-    if (/\d/.test(cur) || cur === DOT) {
-      if (exp[i - 1] === MINUS && (!/\d/.test(exp[i - 2]) || i === 1)) {
-        num += MINUS;
-      }
-      num += cur;
-    } else {
-      if (num.length) {
-        parsed.push({ type: 'number', value: num });
-      }
-
-      if (cur === '(' || cur === ')') {
-        parsed.push({ type: 'bracket', value: cur });
-      } else if (cur === '+') {
-        parsed.push({ type: 'sign', value: cur, priority: 1 });
-      } else if (cur === MINUS && /\d/.test(exp[i - 1])) {
-        parsed.push({ type: 'sign', value: cur, priority: 1 });
-      } else if (cur === '*' || cur === '\\') {
-        parsed.push({ type: 'sign', value: cur, priority: 2 });
-      } else if (cur === '%') {
-        parsed.push({ type: 'sign', value: cur, priority: 3 });
-      }
-
-      num = '';
-      lastSign = i;
-    }
-  }
-  if (!/\d/.test(exp[lastSign - 1])) {
-    lastSign -= 1;
-  }
-  const lastEl = exp.slice(lastSign + 1);
-  if (lastEl) {
-    parsed.push({ type: 'number', value: exp.slice(lastSign + 1) });
-  }
-
-  return parsed;
-}
 
 function reducer(state, { type, payload }) {
   switch (type) {
@@ -119,10 +75,12 @@ function reducer(state, { type, payload }) {
         };
       }
       // if operation was typed we need to push it to current history
-      if (!/\d/.test(state.curOperand)) {
+      if (state.curOperand !== '' && !/\d/.test(state.curOperand)) {
+        const newOperand = [...state.prevOperand];
+        newOperand.push(state.curOperand);
         return {
           ...state,
-          prevOperand: `${state.prevOperand}${state.curOperand}`,
+          prevOperand: newOperand,
           curOperand: `${
             payload.digit === DOT ? `0${payload.digit}` : payload.digit
           }`
@@ -132,21 +90,27 @@ function reducer(state, { type, payload }) {
         ...state,
         curOperand: `${state.curOperand || ''}${payload.digit}`
       };
-    case ADD_BRACKET:
+    case ADD_BRACKET: {
+      const newOperand = [...state.prevOperand];
+      if (state.curOperand !== '') {
+        newOperand.push(state.curOperand);
+      }
+      newOperand.push(payload.digit);
       return {
         ...state,
-        prevOperand: `${state.prevOperand}${
-          state.overwrite ? '' : state.curOperand
-        }${payload.digit}`,
+        prevOperand: newOperand,
         curOperand: ''
       };
+    }
     case CHOOSE_OPERATION: {
       // if number was typed we need to push it to current history
       if (state.curOperand !== '' && /\d/.test(state.curOperand)) {
+        const newOperand = [...state.prevOperand];
+        newOperand.push(state.curOperand);
         return {
           ...state,
           overwrite: false,
-          prevOperand: `${state.prevOperand}${state.curOperand}`,
+          prevOperand: newOperand,
           curOperand: payload.operation
         };
       }
@@ -165,50 +129,33 @@ function reducer(state, { type, payload }) {
         ...state,
         overwrite: false,
         curOperand: '',
-        prevOperand: ''
+        prevOperand: []
       };
     case CE_ACTION:
-      // if there was an expression with brackets dont't do anythig
-      if (state.prevOperand[state.prevOperand.length - 1] === RIGHT_BRACKET) {
+      // just delete current operand if previous is empty
+      if (state.curOperand !== '' && !state.prevOperand.length) {
         return { ...state, curOperand: '' };
       }
-      // in usual case put previous typed thing to the input
-      if (state.curOperand !== '' && state.prevOperand !== '') {
-        let lastTypedIndex = 0;
-        if (/\d/.test(state.prevOperand[state.prevOperand.length - 1])) {
-          for (let i = state.prevOperand.length - 1; i >= 0; i += 1) {
-            if (
-              !/\d/.test(state.prevOperand[i]) &&
-              !(state.prevOperand[i] === DOT)
-            ) {
-              lastTypedIndex = i + 1;
-              break;
-            }
-          }
-        } else {
-          lastTypedIndex = state.prevOperand.length - 1;
-        }
+      if (state.curOperand !== '' && state.prevOperand.length) {
+        const newOperand = [...state.prevOperand];
+        const lastItem = newOperand.pop();
 
         return {
           ...state,
-          curOperand: state.prevOperand.slice(lastTypedIndex),
-          prevOperand: state.prevOperand.slice(0, lastTypedIndex)
+          curOperand: lastItem,
+          prevOperand: newOperand
         };
-      }
-      if (state.curOperand !== '' && state.prevOperand === '') {
-        return { ...state, curOperand: '' };
       }
       return state;
     case EXECUTE: {
       if (
-        state.prevOperand === '' ||
+        !state.prevOperand.length ||
         (state.curOperand === '' &&
           state.prevOperand[state.prevOperand.length - 1] !== RIGHT_BRACKET)
       ) {
         return state;
       }
 
-      const parsedExp = parseExp(state.prevOperand + state.curOperand);
       const numStack = [];
       const signStack = [];
 
@@ -237,6 +184,27 @@ function reducer(state, { type, payload }) {
         }
         numStack.push({ type: 'number', value: calculator.getCurrent() });
       };
+
+      const newOperand = [...state.prevOperand];
+      if (state.curOperand !== '') {
+        newOperand.push(state.curOperand);
+      }
+
+      const parsedExp = newOperand.map((item) => {
+        if (item === LEFT_BRACKET || item === RIGHT_BRACKET) {
+          return { type: 'bracket', value: item };
+        }
+        if (/\d/.test(item)) {
+          return { type: 'number', value: item };
+        }
+        if (item === MINUS || item === PLUS) {
+          return { type: 'sign', value: item, priority: 1 };
+        }
+        if (item === MULTIPLY || item === DIVIDE) {
+          return { type: 'sign', value: item, priority: 2 };
+        }
+        return { type: 'sign', value: item, priority: 3 };
+      });
 
       parsedExp.forEach((item) => {
         if (item.type === 'number') {
@@ -274,7 +242,9 @@ function reducer(state, { type, payload }) {
       }
       const val = numStack[0].value;
       const res = Math.round(val * 1000) / 1000;
-      const histItem = `${state.prevOperand}${state.curOperand}=${res}`;
+      const histItem = `${state.prevOperand.join('')}${
+        state.curOperand
+      }=${res}`;
       const newHist = [...state.history];
       newHist.unshift(histItem);
 
@@ -282,7 +252,7 @@ function reducer(state, { type, payload }) {
         ...state,
         overwrite: true,
         curOperand: `${res}`,
-        prevOperand: '',
+        prevOperand: [],
         history: newHist
       };
     }
@@ -295,16 +265,20 @@ function reducer(state, { type, payload }) {
       }
       if (/\d/.test(state.curOperand)) {
         const lastTyped = state.prevOperand[state.prevOperand.length - 1];
+        const newOperand = [...state.prevOperand];
+        newOperand.pop();
         if (lastTyped === PLUS) {
+          newOperand.push(MINUS);
           return {
             ...state,
-            prevOperand: `${state.prevOperand.slice(0, -1)}-`
+            prevOperand: newOperand
           };
         }
         if (lastTyped === MINUS) {
+          newOperand.push(PLUS);
           return {
             ...state,
-            prevOperand: `${state.prevOperand.slice(0, -1)}+`
+            prevOperand: newOperand
           };
         }
         if (state.curOperand[0] === MINUS) {
