@@ -18,7 +18,7 @@ const CalculatorWrapper = styled.div`
 const FunctionalityWrapper = styled.div`
   @media (orientation: landscape) {
     & {
-      width: 75vw;
+      width: ${(props) => (props.showHistory ? '75vw' : '95vw')};
     }
   }
 `;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { CalculatorFunc, CalculatorClass } from '@Screens/Calculator';
 import ErrorPage from '@Screens/ErrorPage';
@@ -28,6 +28,10 @@ function App() {
       <ThemeProvider theme={theme.value}>
         <Header />
         <Routes>
+          <Route
+            path="/"
+            element={<Navigate to="/calculator-functional" replace />}
+          />
           <Route path="/calculator-functional" element={<CalculatorFunc />} />
           <Route path="/calculator-class" element={<CalculatorClass />} />
           <Route

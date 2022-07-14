@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   HorizontalDivider,
   MobileDevider
@@ -7,35 +7,72 @@ import VerticalDevider from '@Components/VerticalDevider';
 import { DisplayFunc, DisplayClass } from '@Containers/Display';
 import { KeypadFunc, KeypadClass } from '@Containers/Keypad';
 import { HistoryFunc, HistoryClass } from '@Containers/History';
+import { ControlPanelFunc, ControlPanelClass } from '@Containers/ControlPanel';
 import { CalculatorWrapper, FunctionalityWrapper } from './components';
 
 function CalculatorFunc() {
+  const [showHistory, setShowHistory] = useState(true);
+
+  const handleShowHistory = () => {
+    setShowHistory((prevState) => !prevState);
+  };
+
   return (
     <CalculatorWrapper>
-      <FunctionalityWrapper>
+      <FunctionalityWrapper showHistory={showHistory}>
         <DisplayFunc />
         <HorizontalDivider />
         <KeypadFunc />
       </FunctionalityWrapper>
-      <VerticalDevider />
-      <MobileDevider />
-      <HistoryFunc />
+      <ControlPanelFunc
+        handleShowHistory={handleShowHistory}
+        showHistory={showHistory}
+      />
+      {showHistory && (
+        <>
+          <VerticalDevider />
+          <MobileDevider />
+          <HistoryFunc />
+        </>
+      )}
     </CalculatorWrapper>
   );
 }
 
 class CalculatorClass extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showHistory: true
+    };
+    this.handleShowHistory = this.handleShowHistory.bind(this);
+  }
+
+  handleShowHistory() {
+    this.setState((state) => ({ showHistory: !state.showHistory }));
+  }
+
   render() {
+    const { showHistory } = this.state;
+
     return (
       <CalculatorWrapper>
-        <FunctionalityWrapper>
+        <FunctionalityWrapper showHistory={showHistory}>
           <DisplayClass />
           <HorizontalDivider />
           <KeypadClass />
         </FunctionalityWrapper>
-        <VerticalDevider />
-        <MobileDevider />
-        <HistoryClass />
+        <ControlPanelClass
+          handleShowHistory={this.handleShowHistory}
+          showHistory={showHistory}
+        />
+        {showHistory && (
+          <>
+            <VerticalDevider />
+            <MobileDevider />
+            <HistoryClass />
+          </>
+        )}
       </CalculatorWrapper>
     );
   }

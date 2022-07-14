@@ -5,7 +5,7 @@ const HeaderContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.headerBackground};
   @media (orientation: portrait) {
     & {
-      height: 10vh;
+      height: 8vh;
     }
   }
   @media (orientation: landscape) {

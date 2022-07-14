@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const HistoryWrapper = styled.div`
   @media (orientation: portrait) {
     & {
-      height: 38vh;
+      height: 36vh;
     }
   }
   @media (orientation: landscape) {
