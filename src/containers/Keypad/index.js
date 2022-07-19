@@ -1,3 +1,4 @@
-import { KeypadFunc, KeypadClass } from './Keypad';
+import KeypadFunc from './KeypadFunc';
+import KeypadClass from './KeypadClass';
 
 export { KeypadFunc, KeypadClass };

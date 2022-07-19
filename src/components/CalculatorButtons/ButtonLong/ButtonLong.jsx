@@ -1,31 +1,16 @@
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
-import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
-import { CHOOSE_OPERATION, EXECUTE } from '@Constants/calculator-actions';
-import { PLUS } from '@Constants/calculator-signs';
 import LongCButton from './components';
 
-function ButtonLong({ children }) {
-  const ctx = useContext(CalculatorContext);
+function ButtonLong({ children, onButtonClick }) {
+  const buttonClick = (event) => onButtonClick(event.target.innerHTML);
 
-  const buttonClick = (event) => {
-    const sign = event.target.id;
-    if (sign === PLUS) {
-      ctx.dispatch({ type: CHOOSE_OPERATION, payload: { operation: sign } });
-    } else {
-      ctx.dispatch({ type: EXECUTE });
-    }
-  };
-
-  return (
-    <LongCButton onClick={buttonClick} id={children}>
-      {children}
-    </LongCButton>
-  );
+  return <LongCButton onClick={buttonClick}>{children}</LongCButton>;
 }
 
 ButtonLong.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
+  onButtonClick: PropTypes.func.isRequired
 };
 
 export default ButtonLong;

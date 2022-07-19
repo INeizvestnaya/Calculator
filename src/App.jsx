@@ -9,6 +9,10 @@ import GlobalStyles from '@Utils/GlobalStyles';
 import { LIGHT, COLORED, DARK } from '@Constants/themes';
 import themes from '@Utils/StyleTheme';
 import { CalculatorContextProvider } from '@Utils/CalculatorContext.jsx';
+import {
+  ClassErrorBoundary,
+  FuncErrorBoundary
+} from '@Containers/ErrorBoundary';
 
 function App() {
   const [theme, setTheme] = useState({ type: LIGHT, value: themes.light });
@@ -32,8 +36,22 @@ function App() {
             path="/"
             element={<Navigate to="/calculator-functional" replace />}
           />
-          <Route path="/calculator-functional" element={<CalculatorFunc />} />
-          <Route path="/calculator-class" element={<CalculatorClass />} />
+          <Route
+            path="/calculator-functional"
+            element={
+              <FuncErrorBoundary>
+                <CalculatorFunc />
+              </FuncErrorBoundary>
+            }
+          />
+          <Route
+            path="/calculator-class"
+            element={
+              <ClassErrorBoundary>
+                <CalculatorClass />
+              </ClassErrorBoundary>
+            }
+          />
           <Route
             path="/settings"
             element={

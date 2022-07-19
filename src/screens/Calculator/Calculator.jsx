@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   HorizontalDivider,
   MobileDevider
@@ -10,19 +11,23 @@ import { HistoryFunc, HistoryClass } from '@Containers/History';
 import { ControlPanelFunc, ControlPanelClass } from '@Containers/ControlPanel';
 import { CalculatorWrapper, FunctionalityWrapper } from './components';
 
-function CalculatorFunc() {
+function CalculatorFunc({ isError, handleResetError }) {
   const [showHistory, setShowHistory] = useState(true);
 
   const handleShowHistory = () => {
     setShowHistory((prevState) => !prevState);
   };
 
+  const resetError = () => {
+    handleResetError();
+  };
+
   return (
     <CalculatorWrapper>
       <FunctionalityWrapper showHistory={showHistory}>
-        <DisplayFunc />
+        <DisplayFunc isError={isError} />
         <HorizontalDivider />
-        <KeypadFunc />
+        <KeypadFunc isError={isError} resetError={resetError} />
       </FunctionalityWrapper>
       <ControlPanelFunc
         handleShowHistory={handleShowHistory}
@@ -39,6 +44,16 @@ function CalculatorFunc() {
   );
 }
 
+CalculatorFunc.defaultProps = {
+  isError: false,
+  handleResetError: () => {}
+};
+
+CalculatorFunc.propTypes = {
+  isError: PropTypes.bool,
+  handleResetError: PropTypes.func
+};
+
 class CalculatorClass extends React.Component {
   constructor(props) {
     super(props);
@@ -46,21 +61,28 @@ class CalculatorClass extends React.Component {
       showHistory: true
     };
     this.handleShowHistory = this.handleShowHistory.bind(this);
+    this.resetError = this.resetError.bind(this);
   }
 
   handleShowHistory() {
     this.setState((state) => ({ showHistory: !state.showHistory }));
   }
 
+  resetError = () => {
+    const { handleResetError } = this.props;
+    handleResetError();
+  };
+
   render() {
     const { showHistory } = this.state;
+    const { isError } = this.props;
 
     return (
       <CalculatorWrapper>
         <FunctionalityWrapper showHistory={showHistory}>
-          <DisplayClass />
+          <DisplayClass isError={isError} />
           <HorizontalDivider />
-          <KeypadClass />
+          <KeypadClass isError={isError} resetError={this.resetError} />
         </FunctionalityWrapper>
         <ControlPanelClass
           handleShowHistory={this.handleShowHistory}
@@ -77,5 +99,15 @@ class CalculatorClass extends React.Component {
     );
   }
 }
+
+CalculatorClass.defaultProps = {
+  isError: false,
+  handleResetError: () => {}
+};
+
+CalculatorClass.propTypes = {
+  isError: PropTypes.bool,
+  handleResetError: PropTypes.func
+};
 
 export { CalculatorFunc, CalculatorClass };
