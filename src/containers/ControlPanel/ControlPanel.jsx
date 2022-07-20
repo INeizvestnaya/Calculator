@@ -8,7 +8,7 @@ function ControlPanelFunc({ handleShowHistory, showHistory }) {
   };
 
   return (
-    <ShowHideButton onClick={handleClick}>
+    <ShowHideButton onClick={handleClick} data-show-hide>
       {showHistory ? 'Hide' : 'Show'}
     </ShowHideButton>
   );
@@ -34,7 +34,7 @@ class ControlPanelClass extends React.Component {
     const { showHistory } = this.props;
 
     return (
-      <ShowHideButton onClick={this.handleClick}>
+      <ShowHideButton onClick={this.handleClick} data-show-hide>
         {showHistory ? 'Hide' : 'Show'}
       </ShowHideButton>
     );

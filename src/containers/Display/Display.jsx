@@ -12,8 +12,10 @@ function DisplayFunc({ isError }) {
 
   return (
     <DisplayWrapper>
-      <CurrentHistory>{ctx.prevOperand.join('')}</CurrentHistory>
-      <CurrentExpression>
+      <CurrentHistory data-type="cur-hist">
+        {ctx.prevOperand.join('')}
+      </CurrentHistory>
+      <CurrentExpression data-type="cur-exp">
         {isError ? 'Error' : ctx.curOperand}
       </CurrentExpression>
     </DisplayWrapper>
@@ -35,8 +37,12 @@ class DisplayClass extends React.Component {
 
     return (
       <DisplayWrapper>
-        <CurrentHistory>{prevOperand.join('')}</CurrentHistory>
-        <CurrentExpression>{isError ? 'Error' : curOperand}</CurrentExpression>
+        <CurrentHistory data-type="cur-hist">
+          {prevOperand.join('')}
+        </CurrentHistory>
+        <CurrentExpression data-type="cur-exp">
+          {isError ? 'Error' : curOperand}
+        </CurrentExpression>
       </DisplayWrapper>
     );
   }

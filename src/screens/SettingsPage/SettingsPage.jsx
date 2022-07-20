@@ -2,7 +2,6 @@ import { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { CalculatorContext } from '@Utils/CalculatorContext.jsx';
 import { LIGHT, DARK, COLORED } from '@Constants/themes';
-import { CLEAR_ALL_HISTORY } from '@Constants/calculator-actions';
 import {
   SettingsLabel,
   SelectTheme,
@@ -21,11 +20,11 @@ function SettingsPage({ changeTheme, selectedValue }) {
   };
 
   const clearHistory = () => {
-    ctx.dispatch({ type: CLEAR_ALL_HISTORY });
+    ctx.clearHistory();
   };
 
   return (
-    <PageWrapper>
+    <PageWrapper data-settings-wrapper>
       <SettingsLabel>Settings</SettingsLabel>
       <SelectContainer>
         <SelectLabel>Switch Theme</SelectLabel>
@@ -35,7 +34,9 @@ function SettingsPage({ changeTheme, selectedValue }) {
           <ThemeOption value={DARK}>Dark theme</ThemeOption>
         </SelectTheme>
       </SelectContainer>
-      <ClearButton onClick={clearHistory}>Clear all history</ClearButton>
+      <ClearButton onClick={clearHistory} data-clear-hist>
+        Clear all history
+      </ClearButton>
     </PageWrapper>
   );
 }

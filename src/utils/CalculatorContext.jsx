@@ -7,7 +7,8 @@ const CalculatorContext = React.createContext({
   prevOperand: [],
   addHistoryItem: () => {},
   changeCurOperand: () => {},
-  changePrevOperand: () => {}
+  changePrevOperand: () => {},
+  clearHistory: () => {}
 });
 
 function CalculatorContextProvider({ children }) {
@@ -33,6 +34,12 @@ function CalculatorContextProvider({ children }) {
     setPrevOperand(newValue);
   };
 
+  const clearHistory = () => {
+    setHistory([]);
+    setCurOperand('');
+    setPrevOperand([]);
+  };
+
   const memoizedContextValue = useMemo(
     () => ({
       history,
@@ -40,7 +47,8 @@ function CalculatorContextProvider({ children }) {
       prevOperand,
       addHistoryItem,
       changeCurOperand,
-      changePrevOperand
+      changePrevOperand,
+      clearHistory
     }),
     [history, curOperand, prevOperand]
   );

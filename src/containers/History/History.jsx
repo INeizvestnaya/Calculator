@@ -7,7 +7,7 @@ function HistoryFunc() {
   const ctx = useContext(CalculatorContext);
 
   return (
-    <HistoryWrapper>
+    <HistoryWrapper data-hist-wrapper>
       <HistoryLabel>History</HistoryLabel>
       <ItemsWrapper>
         {ctx.history.map((exp) => (
@@ -22,7 +22,7 @@ class HistoryClass extends React.Component {
   render() {
     const { history } = this.context;
     return (
-      <HistoryWrapper>
+      <HistoryWrapper data-hist-wrapper>
         <HistoryLabel>History</HistoryLabel>
         {history.map((exp) => (
           <HistoryItem key={exp}>{exp}</HistoryItem>

@@ -4,7 +4,11 @@ import LongCButton from './components';
 function ButtonLong({ children, onButtonClick }) {
   const buttonClick = (event) => onButtonClick(event.target.innerHTML);
 
-  return <LongCButton onClick={buttonClick}>{children}</LongCButton>;
+  return (
+    <LongCButton onClick={buttonClick} data-text={children}>
+      {children}
+    </LongCButton>
+  );
 }
 
 ButtonLong.propTypes = {

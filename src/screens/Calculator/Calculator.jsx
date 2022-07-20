@@ -23,7 +23,7 @@ function CalculatorFunc({ isError, handleResetError }) {
   };
 
   return (
-    <CalculatorWrapper>
+    <CalculatorWrapper data-calc-func>
       <FunctionalityWrapper showHistory={showHistory}>
         <DisplayFunc isError={isError} />
         <HorizontalDivider />
@@ -78,7 +78,7 @@ class CalculatorClass extends React.Component {
     const { isError } = this.props;
 
     return (
-      <CalculatorWrapper>
+      <CalculatorWrapper data-calc-class>
         <FunctionalityWrapper showHistory={showHistory}>
           <DisplayClass isError={isError} />
           <HorizontalDivider />

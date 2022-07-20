@@ -4,7 +4,11 @@ import CButton from './components';
 function CalculatorButton({ children, onButtonClick }) {
   const buttonClick = (event) => onButtonClick(event.target.innerHTML);
 
-  return <CButton onClick={buttonClick}>{children}</CButton>;
+  return (
+    <CButton onClick={buttonClick} data-text={children}>
+      {children}
+    </CButton>
+  );
 }
 
 CalculatorButton.propTypes = {

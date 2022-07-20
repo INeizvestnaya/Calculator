@@ -5,9 +5,15 @@ function Header() {
     <HeaderContainer>
       <HeaderLabel>Calculator App</HeaderLabel>
       <div>
-        <HeaderLink to="calculator-functional">Functions</HeaderLink>
-        <HeaderLink to="calculator-class">Classes</HeaderLink>
-        <HeaderLink to="settings">Settings</HeaderLink>
+        <HeaderLink to="calculator-functional" data-link="functional">
+          Functions
+        </HeaderLink>
+        <HeaderLink to="calculator-class" data-link="class">
+          Classes
+        </HeaderLink>
+        <HeaderLink to="settings" data-link="settings">
+          Settings
+        </HeaderLink>
       </div>
     </HeaderContainer>
   );
