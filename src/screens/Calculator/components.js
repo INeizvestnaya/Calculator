@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const CalculatorWrapper = styled.div`
   display: flex;
+  height: 100vh;
   @media (orientation: portrait) {
     & {
       flex-direction: column;

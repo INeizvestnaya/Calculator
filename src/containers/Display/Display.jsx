@@ -27,10 +27,6 @@ DisplayFunc.propTypes = {
 };
 
 class DisplayClass extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const { prevOperand, curOperand } = this.context;
     const { isError } = this.props;
@@ -48,5 +44,9 @@ class DisplayClass extends React.Component {
   }
 }
 DisplayClass.contextType = CalculatorContext;
+
+DisplayClass.propTypes = {
+  isError: PropTypes.bool.isRequired
+};
 
 export { DisplayFunc, DisplayClass };

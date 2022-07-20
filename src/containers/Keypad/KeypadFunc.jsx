@@ -33,7 +33,7 @@ function KeypadFunc({ isError, resetError }) {
   const ctx = useContext(CalculatorContext);
 
   function reducer(state, { type, payload }) {
-    const { curOperand, prevOperand, overwrite, histItem } = state;
+    const { curOperand, prevOperand, overwrite } = state;
     switch (type) {
       case ADD_DIGIT:
         // only one zero
@@ -227,12 +227,15 @@ function KeypadFunc({ isError, resetError }) {
 
   useEffect(() => {
     ctx.addHistoryItem(histItem);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [histItem]);
   useEffect(() => {
     ctx.changeCurOperand(curOperand);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [curOperand]);
   useEffect(() => {
     ctx.changePrevOperand(prevOperand);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prevOperand]);
 
   return (

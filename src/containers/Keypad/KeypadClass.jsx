@@ -64,7 +64,7 @@ class KeypadClass extends React.Component {
     }
 
     if (prevState.curTyped.change !== curTyped.change) {
-      const sign = curTyped.sign;
+      const { sign } = curTyped;
       if (sign === C_SIGN) {
         this.setState({
           overwrite: false,
@@ -126,7 +126,7 @@ class KeypadClass extends React.Component {
         if (curOperand !== '') {
           newOperand.push(curOperand);
         }
-        //newOperand.push(sign);
+
         this.setState({
           prevOperand: newOperand,
           curOperand: sign
