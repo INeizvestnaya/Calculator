@@ -3,8 +3,8 @@ import { LIGHT, DARK, COLORED } from './../../src/constants/themes';
 
 describe('testing themes', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/calculator-functional');
-    cy.get('[data-link="settings"]').click({ force: true });
+    cy.visit('http://localhost:3000/Calculator/');
+    cy.get('[data-link="settings-func"]').click({ force: true });
   });
 
   it('changes to dark theme', () => {

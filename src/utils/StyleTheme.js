@@ -6,7 +6,7 @@ const themes = {
       links: '#d0d0d0',
       mainBackground: '#fff',
       font: '#000',
-      deviders: '#404040',
+      dividers: '#404040',
       buttonsBackgound: '#f0f0f0',
       buttonHover: '#e0e0e0',
       buttonsBorder: '#8c8c8c'
@@ -19,7 +19,7 @@ const themes = {
       links: '#d8c7ff',
       mainBackground: '#f6f2ff',
       font: '#0c0024',
-      deviders: '#200e45',
+      dividers: '#200e45',
       buttonsBackgound: '#e2d6ff',
       buttonHover: '#d8c7ff',
       buttonsBorder: '#bda1ff'
@@ -32,7 +32,7 @@ const themes = {
       links: '#d0d0d0',
       mainBackground: '#303030',
       font: '#f0f0f0',
-      deviders: '#707070',
+      dividers: '#707070',
       buttonsBackgound: '#252525',
       buttonHover: '#353535',
       buttonsBorder: '#707070'

@@ -1,110 +1,182 @@
-import Calculator, {
-  AddCommand,
-  SubCommand,
-  MulCommand,
-  DivCommand,
-  RemCommand
-} from '@Utils/Command';
 import {
-  PLUS,
-  MINUS,
-  MULTIPLY,
-  DIVIDE,
-  REMAINDER,
   LEFT_BRACKET,
-  RIGHT_BRACKET
-} from '@Constants/calculator-signs';
+  RIGHT_BRACKET,
+  C_SIGN,
+  CE_SIGN,
+  DOT,
+  PLUS_MINUS,
+  EQUAL,
+  ZERO,
+  PLUS,
+  MINUS
+} from '@Constants/calculatorSigns';
+import calculateExpression from './calculateExpression';
+import { setLocalStorage, getLocalStorage } from './localStorageActions';
 
-const calculator = Calculator();
+const resetCurrent = () => {
+  const { curOperand, prevOperand } = getLocalStorage();
 
-function calculateExpression(curOperand, prevOperand) {
-  const numStack = [];
-  const signStack = [];
+  if (curOperand !== '' && !prevOperand.length) {
+    localStorage.setItem('curOperand', '');
+  }
 
-  const exec = () => {
-    const rightValue = numStack.pop().value;
-    calculator.setCurrent(numStack.pop().value);
-    const operation = signStack.pop().value;
-    switch (operation) {
-      case PLUS:
-        calculator.execute(new AddCommand(rightValue));
-        break;
-      case MINUS:
-        calculator.execute(new SubCommand(rightValue));
-        break;
-      case MULTIPLY:
-        calculator.execute(new MulCommand(rightValue));
-        break;
-      case DIVIDE:
-        calculator.execute(new DivCommand(rightValue));
-        break;
-      case REMAINDER:
-        calculator.execute(new RemCommand(rightValue));
-        break;
-      default:
-        break;
-    }
-    numStack.push({ type: 'number', value: calculator.getCurrent() });
-  };
+  if (curOperand !== '' && prevOperand.length) {
+    const lastItem = prevOperand.pop();
 
-  const newOperand = [...prevOperand];
+    setLocalStorage(lastItem, prevOperand);
+  }
+};
+
+const addDigit = (sign) => {
+  const { curOperand, prevOperand, overwrite } = getLocalStorage();
+
+  // only one zero
+  if (sign === ZERO && curOperand === ZERO) {
+    return;
+  }
+  // only one dot
+  if (sign === DOT && curOperand.includes(DOT)) {
+    return;
+  }
+  // zero is added before a dot
+  if (sign === DOT && curOperand === '') {
+    localStorage.setItem('curOperand', `0${sign}`);
+    return;
+  }
+  // if operation was executed and we need to rewrite
+  if (overwrite) {
+    setLocalStorage(sign === DOT ? `0${sign}` : sign, undefined, false);
+    return;
+  }
+  // if operation was typed we need to push it to current history
+  if (curOperand !== '' && !/\d/.test(curOperand)) {
+    prevOperand.push(curOperand);
+
+    setLocalStorage(sign === DOT ? `0${sign}` : sign, prevOperand);
+    return;
+  }
+
+  localStorage.setItem('curOperand', `${curOperand || ''}${sign}`);
+};
+
+const chooseOperation = (sign) => {
+  const { curOperand, prevOperand } = getLocalStorage();
+
+  // if something was typed we need to push it to current history
+  if (
+    curOperand !== '' &&
+    (/\d/.test(curOperand) ||
+      curOperand === LEFT_BRACKET ||
+      curOperand === RIGHT_BRACKET)
+  ) {
+    prevOperand.push(curOperand);
+
+    setLocalStorage(sign, prevOperand, false);
+    return;
+  }
+  // if operation was typed we rewrite it
+  if (curOperand !== '' && !/\d/.test(curOperand)) {
+    localStorage.setItem('curOperand', sign);
+    return;
+  }
+  // if nothing was typed
+  if (curOperand === '' && prevOperand !== '') {
+    localStorage.setItem('curOperand', sign);
+  }
+};
+
+const addBracket = (sign) => {
+  const { curOperand, prevOperand } = getLocalStorage();
+
   if (curOperand !== '') {
-    newOperand.push(curOperand);
+    prevOperand.push(curOperand);
   }
 
-  const parsedExp = newOperand.map((item) => {
-    if (item === LEFT_BRACKET || item === RIGHT_BRACKET) {
-      return { type: 'bracket', value: item };
-    }
-    if (/\d/.test(item)) {
-      return { type: 'number', value: item };
-    }
-    if (item === MINUS || item === PLUS) {
-      return { type: 'sign', value: item, priority: 1 };
-    }
-    if (item === MULTIPLY || item === DIVIDE) {
-      return { type: 'sign', value: item, priority: 2 };
-    }
-    return { type: 'sign', value: item, priority: 3 };
-  });
+  setLocalStorage(sign, prevOperand);
+};
 
-  parsedExp.forEach((item) => {
-    if (item.type === 'number') {
-      numStack.push(item);
-    } else if (item.type === 'bracket') {
-      if (item.value === LEFT_BRACKET) {
-        signStack.push(item);
-      } else {
-        let lastItem = signStack[signStack.length - 1];
-        while (lastItem.value !== LEFT_BRACKET) {
-          exec();
-          lastItem = signStack[signStack.length - 1];
-        }
-        signStack.pop();
-      }
-    } else if (!signStack.find((el) => el.type === 'sign')) {
-      signStack.push(item);
+const changeSign = () => {
+  const { curOperand, prevOperand } = getLocalStorage();
+
+  if (curOperand === PLUS) {
+    localStorage.setItem('curOperand', MINUS);
+    return;
+  }
+
+  if (curOperand === MINUS) {
+    localStorage.setItem('curOperand', PLUS);
+    return;
+  }
+
+  if (/\d/.test(curOperand)) {
+    const lastTyped = prevOperand[prevOperand.length - 1];
+    prevOperand.pop();
+
+    if (lastTyped === PLUS) {
+      prevOperand.push(MINUS);
+      localStorage.setItem('prevOperand', prevOperand);
+      return;
+    }
+
+    if (lastTyped === MINUS) {
+      prevOperand.push(PLUS);
+      localStorage.setItem('prevOperand', prevOperand);
+      return;
+    }
+
+    if (curOperand[0] === MINUS) {
+      localStorage.setItem('curOperand', curOperand.slice(1));
+      return;
+    }
+
+    localStorage.setItem('curOperand', `-${curOperand}`);
+  }
+};
+
+const execute = () => {
+  const { curOperand, prevOperand, history } = getLocalStorage();
+
+  if (
+    !prevOperand.length ||
+    (curOperand === '' && prevOperand[prevOperand.length - 1] !== RIGHT_BRACKET)
+  ) {
+    return;
+  }
+
+  const res = calculateExpression(curOperand, prevOperand);
+
+  if (!Number.isFinite(res)) {
+    throw new Error('Error in calculations');
+  }
+
+  const histItem = `${prevOperand.join('')}${curOperand}=${res}`;
+  history.unshift(histItem);
+
+  setLocalStorage(`${res}`, [], true, history);
+};
+
+const handleSignType = (sign) => {
+  try {
+    if (sign === C_SIGN) {
+      setLocalStorage('', [], false);
+    } else if (sign === CE_SIGN) {
+      resetCurrent();
+    } else if (sign === DOT || /\d/.test(sign)) {
+      addDigit(sign);
+    } else if (sign === LEFT_BRACKET || sign === RIGHT_BRACKET) {
+      addBracket(sign);
+    } else if (sign === PLUS_MINUS) {
+      changeSign();
+    } else if (sign === EQUAL) {
+      execute();
     } else {
-      let lastItem = signStack[signStack.length - 1];
-      if (lastItem.type === 'sign' && lastItem.priority < item.priority) {
-        signStack.push(item);
-      } else if (lastItem.type === 'bracket') {
-        signStack.push(item);
-      } else {
-        while (lastItem && item && lastItem.priority >= item.priority) {
-          exec();
-          lastItem = signStack[signStack.length - 1];
-        }
-        signStack.push(item);
-      }
+      chooseOperation(sign);
     }
-  });
-  while (signStack.length) {
-    exec();
+
+    return false;
+  } catch (err) {
+    return true;
   }
+};
 
-  const val = numStack[0].value;
-  return Math.round(val * 1000) / 1000;
-}
-
-export default calculateExpression;
+export default handleSignType;

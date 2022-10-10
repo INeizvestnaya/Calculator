@@ -12,7 +12,7 @@ import {
   CE_SIGN,
   C_SIGN,
   ZERO
-} from '@Constants/calculator-signs';
+} from '@Constants/calculatorSigns';
 
 const keypad = [
   [PLUS_MINUS, DOT, C_SIGN, CE_SIGN],

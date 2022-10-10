@@ -11,11 +11,7 @@ Cypress.Commands.add('buttonsClick', (buttons) => {
 
 Cypress.Commands.add('checkTheme', (theme, color) => {
   cy.get('select').select(theme, { force: true });
-  cy.get('[data-settings-wrapper]').should(
-    'have.css',
-    'background-color',
-    color
-  );
+  cy.get('[data-check-theme]').should('have.css', 'background-color', color);
   cy.get('[data-link="functional"]').click({ force: true });
   cy.get('[data-calc-func]').should('have.css', 'background-color', color);
   cy.get('[data-link="class"]').click({ force: true });

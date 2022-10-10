@@ -1,10 +1,10 @@
 /// <reference types="cypress" />
 
-import { PLUS, MULTIPLY, EQUAL } from './../../src/constants/calculator-signs';
+import { PLUS, MULTIPLY, EQUAL } from './../../src/constants/calculatorSigns';
 
 describe('testing history', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/calculator-functional');
+    cy.visit('http://localhost:3000/Calculator/');
     cy.buttonsClick(['1', PLUS, '2', EQUAL, MULTIPLY, '3', EQUAL]);
   });
 
@@ -27,8 +27,16 @@ describe('testing history', () => {
     cy.get('[data-hist-item="3*3=9"]').should('have.text', '3*3=9');
   });
 
-  it('button clears the history', () => {
-    cy.get('[data-link="settings"]').click({ force: true });
+  it('button clears the history from functional settings', () => {
+    cy.get('[data-link="settings-func"]').click({ force: true });
+    cy.get('[data-clear-hist]').click({ force: true });
+    cy.get('[data-link="functional"]').click({ force: true });
+    cy.get('[data-hist-item]').should('have.length', 0);
+    cy.get('[data-type="cur-exp"]').should('have.text', '');
+  });
+
+  it('button clears the history from class settings', () => {
+    cy.get('[data-link="settings-class"]').click({ force: true });
     cy.get('[data-clear-hist]').click({ force: true });
     cy.get('[data-link="functional"]').click({ force: true });
     cy.get('[data-hist-item]').should('have.length', 0);

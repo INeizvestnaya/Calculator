@@ -1,71 +1,107 @@
-import { useState } from 'react';
+import { useContext, useState, useEffect, useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
-import { CalculatorFunc, CalculatorClass } from '@Screens/Calculator';
-import ErrorPage from '@Screens/ErrorPage';
-import SettingsPage from '@Screens/SettingsPage';
-import Header from '@Containers/Header';
+import { EQUAL } from '@Constants/calculatorSigns';
+import { CalculatorFunc, CalculatorClass } from '@Pages/Calculator';
+import ErrorPage from '@Pages/ErrorPage';
+import { SettingsPageFunc, SettingsPageClass } from '@Pages/SettingsPage';
 import GlobalStyles from '@Utils/GlobalStyles';
-import { LIGHT, COLORED, DARK } from '@Constants/themes';
-import themes from '@Utils/StyleTheme';
-import { CalculatorContextProvider } from '@Utils/CalculatorContext.jsx';
 import {
-  ClassErrorBoundary,
-  FuncErrorBoundary
-} from '@Containers/ErrorBoundary';
+  CALCULATOR_FUNCTIONAL,
+  CALCULATOR_CLASS,
+  SETTINGS_FUNC,
+  SETTINGS_CLASS
+} from '@Constants/paths';
+import { ThemeContext } from '@Utils/ThemeContext.jsx';
+import handleSignType from '@Utils/calculations';
+import { getLocalStorage, setLocalStorage } from '@Utils/localStorageActions';
+
+const initialCalсData = getLocalStorage();
+
+const resetOperation = () => setLocalStorage('', [], false);
 
 function App() {
-  const [theme, setTheme] = useState({ type: LIGHT, value: themes.light });
+  const theme = useContext(ThemeContext);
 
-  const changeTheme = (t) => {
-    if (t === COLORED) {
-      setTheme({ type: COLORED, value: themes.colored });
-    } else if (t === DARK) {
-      setTheme({ type: DARK, value: themes.dark });
-    } else {
-      setTheme({ type: LIGHT, value: themes.light });
+  const [displayData, setDisplayData] = useState({
+    curOperand: '',
+    prevOperand: []
+  });
+  const [historyData, setHistoryData] = useState(initialCalсData.history || []);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    resetOperation();
+  }, []);
+
+  useEffect(() => {
+    if (isError) {
+      throw new Error('Error in calculations');
     }
-  };
+  }, [isError]);
+
+  const typeSign = useCallback((sign) => {
+    const err = handleSignType(sign);
+    if (err) {
+      resetOperation();
+      setIsError(true);
+    }
+
+    const { curOperand, prevOperand, history } = getLocalStorage();
+    setDisplayData({ curOperand, prevOperand });
+    if (sign === EQUAL) {
+      setHistoryData(history);
+    }
+  }, []);
+
+  const clearHistory = useCallback(() => {
+    setDisplayData({
+      curOperand: '',
+      prevOperand: []
+    });
+    setHistoryData([]);
+    setLocalStorage('', [], false, []);
+  }, []);
 
   return (
-    <CalculatorContextProvider>
-      <ThemeProvider theme={theme.value}>
-        <Header />
-        <Routes>
-          <Route
-            path="/"
-            element={<Navigate to="/calculator-functional" replace />}
-          />
-          <Route
-            path="/calculator-functional"
-            element={
-              <FuncErrorBoundary>
-                <CalculatorFunc />
-              </FuncErrorBoundary>
-            }
-          />
-          <Route
-            path="/calculator-class"
-            element={
-              <ClassErrorBoundary>
-                <CalculatorClass />
-              </ClassErrorBoundary>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <SettingsPage
-                changeTheme={changeTheme}
-                selectedValue={theme.type}
-              />
-            }
-          />
-          <Route path="/*" element={<ErrorPage />} />
-        </Routes>
-        <GlobalStyles />
-      </ThemeProvider>
-    </CalculatorContextProvider>
+    <ThemeProvider theme={theme.theme.value}>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to={CALCULATOR_FUNCTIONAL} replace />}
+        />
+        <Route
+          path={CALCULATOR_FUNCTIONAL}
+          element={
+            <CalculatorFunc
+              typeSign={typeSign}
+              displayData={displayData}
+              historyData={historyData}
+            />
+          }
+        />
+        <Route
+          path={CALCULATOR_CLASS}
+          element={
+            <CalculatorClass
+              typeSign={typeSign}
+              displayData={displayData}
+              historyData={historyData}
+            />
+          }
+        />
+        <Route
+          path={SETTINGS_FUNC}
+          element={<SettingsPageFunc clearHistory={clearHistory} />}
+        />
+        <Route
+          path={SETTINGS_CLASS}
+          element={<SettingsPageClass clearHistory={clearHistory} />}
+        />
+        <Route path="/*" element={<ErrorPage />} />
+      </Routes>
+      <GlobalStyles />
+    </ThemeProvider>
   );
 }
 

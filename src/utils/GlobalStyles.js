@@ -1,6 +1,11 @@
 import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyles = createGlobalStyle`
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
   @media (max-width: 1000px) {
     html {
       font-size: 30px;

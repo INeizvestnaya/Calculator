@@ -10,7 +10,7 @@ import {
   LEFT_BRACKET,
   RIGHT_BRACKET,
   PLUS_MINUS
-} from './../../src/constants/calculator-signs';
+} from './../../src/constants/calculatorSigns';
 
 const firstExp = [
   '2',
@@ -32,7 +32,7 @@ const thirdExp = ['7', '\\\\', '3', EQUAL];
 
 describe('testing operations on functional calculator', () => {
   before(() => {
-    cy.visit('http://localhost:3000/calculator-functional');
+    cy.visit('http://localhost:3000/Calculator/');
   });
 
   it('calculates long expression with brackets', () => {

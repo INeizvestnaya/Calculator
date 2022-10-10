@@ -13,7 +13,7 @@ import {
   CE_SIGN,
   C_SIGN,
   ZERO
-} from './../../src/constants/calculator-signs';
+} from './../../src/constants/calculatorSigns';
 
 const buttons = [
   '1',
@@ -36,7 +36,7 @@ const buttons = [
 
 describe('testing functional keypad', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/calculator-functional');
+    cy.visit('http://localhost:3000/Calculator/');
   });
 
   it('displays functional keypad buttons', () => {

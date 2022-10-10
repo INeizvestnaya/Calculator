@@ -2,7 +2,7 @@
 
 describe('testing control panel in functional components', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/calculator-functional');
+    cy.visit('http://localhost:3000/Calculator/');
   });
 
   it('button always exists', () => {
