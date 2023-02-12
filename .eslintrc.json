@@ -1,0 +1,55 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
+        "airbnb",
+        "airbnb/hooks",
+        "plugin:prettier/recommended",
+        "plugin:import/recommended"
+    ],
+    "parser": "@babel/eslint-parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true,
+            "modules": true
+        },
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "import",
+        "prettier"
+    ],
+    "rules": {
+        "react/react-in-jsx-scope": "off",
+        "react/prefer-stateless-function": "off",
+        "import/prefer-default-export": "off",
+        "react/no-did-update-set-state": "off",
+        "react/function-component-definition": "off",
+        "react/jsx-props-no-spreading": "off"
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "alias": {
+                "map": [
+                    ["@Assets", "./src/assets"],
+                    ["@Components", "./src/components"],
+                    ["@Store", "./src/store"],
+                    ["@Constants", "./src/constants"],
+                    ["@Pages", "./src/pages"],
+                    ["@Utils", "./src/utils"],
+                    ["@", "./src"]
+                ]
+            }
+        }
+    }
+}
